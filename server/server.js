@@ -1,9 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const {mongoose} = require('./db/mongoose.js');
-const {Todo} = require('./models/todo.js');
-const {User} = require('./models/user.js');
+const {
+    mongoose
+} = require('./db/mongoose.js');
+const {
+    Todo
+} = require('./models/todo.js');
+const {
+    User
+} = require('./models/user.js');
 
 const app = express();
 
@@ -16,10 +22,10 @@ app.post('/todos', (req, res) => {
         text: req.body.text
     });
 
-    todo.save().then((doc)=>{
+    todo.save().then((doc) => {
         res.send(doc);
         //console.log(`Saved todo: ${JSON.stringify(doc,undefined,2)}`);
-    }, (err)=>{
+    }, (err) => {
         res.status(400).send(err);
         //console.log('Unable to save todo', err);
     });
@@ -27,7 +33,12 @@ app.post('/todos', (req, res) => {
 
 // Read all todos
 app.get('/todos', (req, res) => {
-
+    Todo.find().then((todos) => {
+            res.send({todos});
+        },
+        (err) => {
+            res.status(400).send(err);
+        });
 });
 
 const port = process.env.PORT || 3000;
