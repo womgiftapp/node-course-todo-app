@@ -1,21 +1,47 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
+
+// {
+//     email: 'rita@test.com',
+//     password: 'efwfwefffewfw',
+//     tokens:[{
+//         access:'auth',
+//         token:'leh23irilrf4nh'
+//     }]
+// }
 
 const User = mongoose.model('User', {
-    name: {
-        type: String,
-        required: true,
-        trim: true,
-        minlength: 3
-    },
     email: {
         type: String,
         required: true,
         trim: true,
-        minlength: 3
-    }
+        minlength: 1,
+        unique: true,
+        validate: {
+            validator: validator.isEmail,
+            message: '{VALUE} is not a valid email'
+        }
+    },
+    password: {
+        type: String,
+        required: true,
+        minlength: 6
+    },
+    tokens: [{
+        access: {
+            type: String,
+            required: true
+        },
+        token: {
+            type: String,
+            required: true
+        }
+    }]
 });
 
-module.exports = {User};
+module.exports = {
+    User
+};
 
 // const newUser = new User({
 //     name: "rita",
